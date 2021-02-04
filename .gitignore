@@ -1,3 +1,6 @@
 /target
 /config.yml
 /.idea
+/frontend/.routify
+/frontend/dist
+/frontend/node_modules
