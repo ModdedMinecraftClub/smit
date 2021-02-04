@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "build": "rm -rf dist && routify -b && webpack"
+    "buildRelease": "rm -rf dist && routify -b && webpack --mode=production",
+    "buildDebug": "rm -rf dist && routify -b && webpack --mode=development"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
