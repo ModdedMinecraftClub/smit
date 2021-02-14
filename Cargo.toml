@@ -10,6 +10,7 @@ actix-web-static-files = { git = "https://github.com/john01dav/actix-web-static-
 serde = "1.0.123"
 serde_yaml = "0.8.16"
 anyhow = "1.0.38"
+sqlx = {version = "0.4.1", features = ["runtime-actix-rustls", "mysql", "macros"]}
 
 [profile.release]
 lto = true
