@@ -1,5 +1,4 @@
 const path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map', //to ensure that this doesn't end up enabled in production, always disable it when you're done using it
@@ -28,8 +27,15 @@ module.exports = {
                 resolve: {
                     fullySpecified: false
                 }
+            },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+                use: 'file-loader',
             }
         ]
-    },
-    plugins: [new HtmlWebpackPlugin()]
+    }
 };
