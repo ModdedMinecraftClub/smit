@@ -1,7 +1,7 @@
 CREATE TABLE users(
     email VARCHAR(128) PRIMARY KEY NOT NULL,
     username VARCHAR(128) NOT NULL,
-    password_hash BINARY(4) NOT NULL,
+    password_hash BINARY(32) NOT NULL, /* if modifying the hash or salt length modify src/accounts/api/crypotgraphy.rs's constants too */
     password_salt BINARY(16) NOT NULL
 );
 

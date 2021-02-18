@@ -3,9 +3,11 @@
     export let type;
     export let value;
 
-    function onInput(event){
-        value = event.target.value;
+    function setType(node, type) {
+        node.type = type;
     }
+
+    value = "";
 </script>
 
 <style>
@@ -32,5 +34,5 @@
     <label for="input" id="label">
         {title}
     </label>
-    <input id="input" type={type} on:input={onInput} on:change={onInput}>
+    <input id="input" use:setType={type} bind:value={value} />
 </div>

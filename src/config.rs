@@ -1,3 +1,6 @@
+use base64::encode;
+use rand::rngs::OsRng;
+use rand::{Rng, RngCore};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_yaml::{from_str, to_string};
@@ -17,6 +20,7 @@ pub struct MySqlCredentials {
 pub struct Config {
     pub bind_address: String,
     pub mysql: MySqlCredentials,
+    pub session_key_base64: String,
 }
 
 impl Default for MySqlCredentials {
@@ -32,9 +36,13 @@ impl Default for MySqlCredentials {
 
 impl Default for Config {
     fn default() -> Self {
+        let mut session_key = vec![0; 64];
+        OsRng.fill_bytes(&mut session_key);
+
         Config {
             bind_address: "127.0.0.1:8192".into(),
             mysql: MySqlCredentials::default(),
+            session_key_base64: encode(&session_key),
         }
     }
 }
