@@ -24,7 +24,7 @@ struct SignupDto {
 }
 
 #[post("/signup")]
-pub async fn signup(pool: Data<MySqlPool>, dto: Json<SignupDto>) -> GenericResult<HttpResponse> {
+async fn signup(pool: Data<MySqlPool>, dto: Json<SignupDto>) -> GenericResult<HttpResponse> {
     sign_up_user(pool.as_ref(), &dto.email, &dto.username, &dto.password).await?;
     Ok(HttpResponse::Ok().await?)
 }
@@ -36,7 +36,7 @@ struct SigninDto {
 }
 
 #[post("/signin")]
-pub async fn signin(
+async fn signin(
     pool: Data<MySqlPool>,
     session: Session,
     dto: Json<SigninDto>,
@@ -46,12 +46,12 @@ pub async fn signin(
 }
 
 #[get("/signout")] //TODO: Fix this when upstream fix is done, needs to be get due to https://github.com/actix/actix-web/issues/2007
-pub async fn signout(session: Session) -> GenericResult<HttpResponse> {
+async fn signout(session: Session) -> GenericResult<HttpResponse> {
     sign_out_user(&session)?;
     Ok(HttpResponse::Ok().await?)
 }
 
 #[get("/status")]
-pub async fn status(session: Session) -> GenericResult<HttpResponse> {
+async fn status(session: Session) -> GenericResult<HttpResponse> {
     Ok(HttpResponse::Ok().json(get_account_or_401(&session)?))
 }

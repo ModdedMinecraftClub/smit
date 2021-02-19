@@ -91,7 +91,7 @@ pub async fn sign_in_user(
             email: user.email,
             username: user.username,
         },
-    );
+    )?;
 
     Ok(())
 }

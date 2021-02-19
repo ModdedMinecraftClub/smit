@@ -1,6 +1,6 @@
 use base64::encode;
 use rand::rngs::OsRng;
-use rand::{Rng, RngCore};
+use rand::RngCore;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_yaml::{from_str, to_string};

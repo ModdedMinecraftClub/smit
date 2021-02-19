@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::http::StatusCode;
 use actix_web::{HttpResponse, ResponseError};
