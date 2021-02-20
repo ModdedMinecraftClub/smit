@@ -25,7 +25,7 @@ pub fn validate_and_sanitize_string(string: &str, allow_new_line: bool) -> Gener
         } else {
             let ctg = GeneralCategory::of(ch);
             if ctg.is_other() || ctg.is_separator() {
-                return Err(GenericError::MalformedRequest(String::from("Input strings for user-supplied content must not contain non-printable characters, excepting newlines in some cases..")));
+                return Err(GenericError::MalformedRequest(String::from("Input strings for user-supplied content must not contain non-printable characters, excepting newlines in some cases.")));
             } else {
                 output.push(ch);
             }

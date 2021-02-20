@@ -13,8 +13,11 @@ CREATE TABLE issues(
 );
 
 CREATE TABLE comments(
-    uuid CHAR(32) PRIMARY KEY NOT NULL,
+    uuid CHAR(36) PRIMARY KEY NOT NULL,
+    issue_uuid CHAR(36) NOT NULL,
     author VARCHAR(128) NOT NULL,
     contents MEDIUMTEXT NOT NULL,
-    timestamp BIGINT NOT NULL
+    timestamp BIGINT NOT NULL,
+    FOREIGN KEY (issue_uuid) REFERENCES issues(uuid),
+    FOREIGN KEY (author) REFERENCES author(email)
 );

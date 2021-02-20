@@ -48,7 +48,7 @@
 
 <div id="navigation-container">
     <input type="text" placeholder="Issue Filter/Search" style="flex-grow: 1">
-    <span class="smit-button" style="background-color: #2563EB">New Issue</span>
+    <a class="smit-button" style="background-color: #2563EB" href="/new">New Issue</a>
 </div>
 
 <div id="issue-container-container">

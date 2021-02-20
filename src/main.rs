@@ -1,10 +1,15 @@
 mod accounts;
+mod api;
 mod config;
+mod controllers;
+mod db;
 mod response_error;
 mod text_check;
+mod util;
 
 use crate::accounts::controller::configure_accounts;
 use crate::config::{yaml_from_file_or_create, Config};
+use crate::controllers::issues::configure_issues;
 use actix_session::CookieSession;
 use actix_web::web::scope;
 use actix_web::{App, HttpServer};
@@ -41,7 +46,11 @@ async fn main() {
                     .http_only(false), //TODO: secure cookies, need HTTPs on loopback and figure out how this works with reverse proxies
             )
             .data(pool.clone())
-            .service(scope("/api").configure(configure_accounts))
+            .service(
+                scope("/api")
+                    .configure(configure_accounts)
+                    .configure(configure_issues),
+            )
             .service(ResourceFiles::new("/", frontend_hash_map).resolve_not_found_to_root())
     })
     .bind(&config.bind_address)

@@ -16,9 +16,10 @@
     .input{
         flex-grow: 1;
         min-width: 0;
+        height: 32rem;
     }
 </style>
 
 <FormRowBase title={title}>
-    <input class="input" use:setType={type} bind:value={value} />
+    <textarea class="input" bind:value={value}></textarea>
 </FormRowBase>

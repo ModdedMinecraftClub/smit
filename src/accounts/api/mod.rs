@@ -12,8 +12,8 @@ mod db;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthenticatedUser {
-    email: String,
-    username: String,
+    pub email: String,
+    pub username: String,
 }
 
 pub async fn sign_up_user(
