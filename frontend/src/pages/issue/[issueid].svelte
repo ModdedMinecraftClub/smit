@@ -1,4 +1,5 @@
 <script>
+    import {getFetchJson} from "../../ajax.js";
     export let issueid;
 </script>
 
@@ -39,45 +40,33 @@
 </style>
 
 <div id="issue-header">
-    <span class="issue-title" style="flex-grow: 1">Example Issue Title</span>
+    <span class="issue-title" style="flex-grow: 1">
+        {#await getFetchJson(`/api/issues/${issueid}`)}
+            Loading...
+        {:then metadata_json}
+            {metadata_json.title}
+        {:catch error}
+            {error.message}
+        {/await}
+    </span>
     <div class="smit-badge" style="background-color: #DC2626">Requires Admin Assistance</div>
     <div class="smit-badge" style="background-color: #7C3AED;">Requires Moderator Assistance</div>
     <div class="smit-badge" style="background-color: #34D399;">Open</div>
 </div>
 
 <div id="comments-container">
-    <div class="smit-card">
-        <div class="comment-author">john01dav</div>
-        <p>
-            I forgot i died on GT server (non-ironman), and reinstalled pack, clearing journeymap waypoints causing me to lose my grave with my items in it. is there a way to get the grave location/contents
-        </p>
-    </div>
-
-    <div class="smit-card">
-        <div class="comment-author">john01dav</div>
-        <p>
-            I forgot i died on GT server (non-ironman), and reinstalled pack, clearing journeymap waypoints causing me to lose my grave with my items in it. is there a way to get the grave location/contents
-        </p>
-    </div>
-
-    <div class="smit-card">
-        <div class="comment-author">john01dav</div>
-        <p>
-            I forgot i died on GT server (non-ironman), and reinstalled pack, clearing journeymap waypoints causing me to lose my grave with my items in it. is there a way to get the grave location/contents
-        </p>
-    </div>
-
-    <div class="smit-card">
-        <div class="comment-author">john01dav</div>
-        <p>
-            I forgot i died on GT server (non-ironman), and reinstalled pack, clearing journeymap waypoints causing me to lose my grave with my items in it. is there a way to get the grave location/contents
-        </p>
-    </div>
-
-    <div class="smit-card">
-        <div class="comment-author">john01dav</div>
-        <p>
-            I forgot i died on GT server (non-ironman), and reinstalled pack, clearing journeymap waypoints causing me to lose my grave with my items in it. is there a way to get the grave location/contents
-        </p>
-    </div>
+    {#await getFetchJson(`/api/issues/${issueid}/comments`)}
+        Loading...
+    {:then comments_json}
+        {#each comments_json as comment}
+            <div class="smit-card">
+                <div class="comment-author">{comment.author}</div>
+                <p>
+                    {comment.contents}
+                </p>
+            </div>
+        {/each}
+    {:catch error}
+        {error.message}
+    {/await}
 </div>

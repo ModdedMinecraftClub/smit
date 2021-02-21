@@ -7,7 +7,7 @@
     let title, markdown;
 
     async function post(){
-        let response = await postFetch('/api/issues/new', {
+        let response = await postFetch('/api/issues', {
             title, markdown
         });
         if(response.ok){

@@ -1,5 +1,7 @@
-use crate::response_error::GenericResult;
+use crate::response_error::{GenericError, GenericResponse, GenericResult};
+use serde::{Deserialize, Serialize};
 use sqlx::MySqlPool;
+use std::str::FromStr;
 use uuid::Uuid;
 
 pub async fn new_issue(pool: &MySqlPool, author_email: &str, title: &str) -> GenericResult<Uuid> {
@@ -44,4 +46,55 @@ pub async fn new_comment(
     .await?;
 
     Ok(uuid)
+}
+
+#[derive(Serialize)]
+pub struct Issue {
+    pub uuid: Uuid,
+    pub author: String,
+    pub title: String,
+}
+
+pub async fn fetch_issue(pool: &MySqlPool, uuid: &Uuid) -> GenericResult<Issue> {
+    let issue = sqlx::query!(
+        r#"SELECT author, title FROM issues WHERE uuid=?"#,
+        uuid.to_string()
+    )
+    .fetch_one(pool)
+    .await?;
+    Ok(Issue {
+        uuid: *uuid,
+        author: issue.author,
+        title: issue.title,
+    })
+}
+
+#[derive(Serialize)]
+pub struct Comment {
+    pub uuid: Uuid,
+    pub author: String,
+    pub contents: String,
+    pub timestamp: i64,
+}
+
+pub async fn fetch_comments_on_issue(
+    pool: &MySqlPool,
+    issue_uuid: &Uuid,
+) -> GenericResult<Vec<Comment>> {
+    Ok(sqlx::query!(
+        "SELECT uuid, author, contents, timestamp FROM comments WHERE issue_uuid=?",
+        issue_uuid.to_string()
+    )
+    .fetch_all(pool)
+    .await?
+    .into_iter()
+    .map(|record| {
+        Ok(Comment {
+            uuid: Uuid::from_str(&record.uuid)?,
+            author: record.author,
+            contents: record.contents,
+            timestamp: record.timestamp,
+        })
+    })
+    .collect::<GenericResult<Vec<Comment>>>()?)
 }
