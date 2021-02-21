@@ -51,20 +51,20 @@ pub async fn new_comment(
 #[derive(Serialize)]
 pub struct Issue {
     pub uuid: Uuid,
-    pub author: String,
+    pub username: String,
     pub title: String,
 }
 
 pub async fn fetch_issue(pool: &MySqlPool, uuid: &Uuid) -> GenericResult<Issue> {
     let issue = sqlx::query!(
-        r#"SELECT author, title FROM issues WHERE uuid=?"#,
+        r#"SELECT username, title FROM issues INNER JOIN users ON issues.author=users.email WHERE uuid=?"#,
         uuid.to_string()
     )
     .fetch_one(pool)
     .await?;
     Ok(Issue {
         uuid: *uuid,
-        author: issue.author,
+        username: issue.username,
         title: issue.title,
     })
 }
@@ -72,7 +72,7 @@ pub async fn fetch_issue(pool: &MySqlPool, uuid: &Uuid) -> GenericResult<Issue> 
 #[derive(Serialize)]
 pub struct Comment {
     pub uuid: Uuid,
-    pub author: String,
+    pub username: String,
     pub contents: String,
     pub timestamp: i64,
 }
@@ -82,7 +82,7 @@ pub async fn fetch_comments_on_issue(
     issue_uuid: &Uuid,
 ) -> GenericResult<Vec<Comment>> {
     Ok(sqlx::query!(
-        "SELECT uuid, author, contents, timestamp FROM comments WHERE issue_uuid=?",
+        "SELECT comments.uuid, username, contents, timestamp FROM comments INNER JOIN users ON comments.author=users.email WHERE issue_uuid=?",
         issue_uuid.to_string()
     )
     .fetch_all(pool)
@@ -91,7 +91,7 @@ pub async fn fetch_comments_on_issue(
     .map(|record| {
         Ok(Comment {
             uuid: Uuid::from_str(&record.uuid)?,
-            author: record.author,
+            username: record.username,
             contents: record.contents,
             timestamp: record.timestamp,
         })

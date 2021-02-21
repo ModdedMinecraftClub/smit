@@ -1,5 +1,7 @@
 <script>
     import {getFetchJson} from "../../ajax.js";
+    import {unixTimestampHumanReadableLocal} from "../../utils.js";
+
     export let issueid;
 </script>
 
@@ -60,7 +62,7 @@
     {:then comments_json}
         {#each comments_json as comment}
             <div class="smit-card">
-                <div class="comment-author">{comment.author}</div>
+                <div class="comment-author">{comment.username} ({unixTimestampHumanReadableLocal(comment.timestamp)})</div>
                 <p>
                     {comment.contents}
                 </p>
